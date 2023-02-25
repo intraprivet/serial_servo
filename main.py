@@ -70,19 +70,43 @@ def multicontrol():
     servo2 = ui.servo2SB.value()
     speed = ui.speedSB.value()
     serialSend([0, servo1, servo2, speed])
-    ui.lcdservo1.display(servo1)
-    ui.lcdservo2.display(servo2)
-    ui.lcdspeed.display(speed)
 
+def multicontrol2():
+    ui.servo1S.setValue(ui.servo1SB.value())
+    ui.servo2S.setValue(ui.servo2SB.value())
+    ui.speedS.setValue(ui.speedSB.value())
+    servo1 = ui.servo1S.value()
+    servo2 = ui.servo2S.value()
+    speed = ui.speedS.value()
+    serialSend([0, servo1, servo2, speed])
+
+def newcom():
+    serial = QSerialPort()
+    serial.setBaudRate(115200)
+    portList = []
+    ports = QSerialPortInfo().availablePorts()
+    for port in ports:
+        portList.append(port.portName())
+    ui.comL.addItems(portList)
+
+    posX = 200
+    posY = 100
+    listX = []
+    for x in range(100): listX.append(x)
+    listY = []
+    for x in range(100): listY.append(0)
 
 serial.readyRead.connect(onRead)
 ui.openB.clicked.connect(onOpen)
 ui.closeB.clicked.connect(onClose)
+ui.newB.clicked.connect(newcom)
 
 ui.servo1S.valueChanged.connect(multicontrol)
 ui.servo2S.valueChanged.connect(multicontrol)
 ui.speedS.valueChanged.connect(multicontrol)
-
+ui.servo1SB.valueChanged.connect(multicontrol)
+ui.servo2SB.valueChanged.connect(multicontrol)
+ui.speedSB.valueChanged.connect(multicontrol)
 
 ui.show()
 app.exec()
